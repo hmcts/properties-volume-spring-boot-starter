@@ -54,14 +54,14 @@ checkstyle {
   maxWarnings = 0
   toolVersion = '8.14'
   // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
-  configDir = new File(rootDir, 'checkstyle')
+  configDir = new File(rootDir, 'config/checkstyle')
 }
 
 pmd {
   toolVersion = "6.9.0"
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest]
   reportsDir = file("$project.buildDir/reports/pmd")
-  ruleSetFiles = files("pmd/ruleset.xml")
+  ruleSetFiles = files("config/pmd/ruleset.xml")
 }
 
 // https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
@@ -69,7 +69,7 @@ dependencyCheck {
   // Specifies if the build should be failed if a CVSS score above a specified level is identified.
   // range of 0-10 fails the build, anything greater and it doesn't fail the build
   failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
-  suppressionFile = 'owasp/suppressions.xml'
+  suppressionFile = 'config/owasp/suppressions.xml'
 }
 
 jacocoTestReport {
@@ -176,7 +176,7 @@ dependencies {
   )
 
   annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-  
+
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
   testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
   testRuntimeOnly group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
