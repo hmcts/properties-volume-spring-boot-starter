@@ -148,7 +148,7 @@ bintray {
   publish = true
   pkg {
     repo = 'hmcts-maven'
-    name = 'propertiesvolume-spring-boot-starter'
+    name = 'properties-volume-spring-boot-starter'
     userOrg = 'hmcts'
     licenses = ['MIT']
     vcsUrl = gitRepo
