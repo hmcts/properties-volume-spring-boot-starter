@@ -23,22 +23,12 @@ import java.util.Arrays;
 @RunWith(SpringRunner.class)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = App.class,
-    properties = {
-        "spring.application.name=propertiesvolume-example",
-        "spring.cloud.propertiesvolume.enabled=true",
-        "spring.cloud.propertiesvolume.paths="
-            + PropertiesvolumesSpringBootTest.BASE_PATH + "/kvcreds-test"
-            + ","
-            + PropertiesvolumesSpringBootTest.BASE_PATH + "/kvcreds-test-other"
-            + ","
-            + PropertiesvolumesSpringBootTest.BASE_PATH + "/kvcreds-test-single/kv5",
-        }
+    classes = App.class
     )
 @AutoConfigureWebTestClient
-public class PropertiesvolumesSpringBootTest {
+public class PropertiesvolumesFromFileSpringBootTest {
 
-    static final String BASE_PATH = "/tmp/Ad1Bg6tfRf";
+    static final String BASE_PATH = "/tmp/Nhdt625dhwUyt";
 
     @Autowired
     private transient WebTestClient webClient;
@@ -48,15 +38,8 @@ public class PropertiesvolumesSpringBootTest {
         Volumes.cleanUp(BASE_PATH);
         Path testDir = Paths.get(BASE_PATH, "kvcreds-test");
         Files.createDirectories(testDir);
-        Path testOtherDir = Paths.get(BASE_PATH, "kvcreds-test-other");
-        Files.createDirectories(testOtherDir);
-        Path testSingleDir = Paths.get(BASE_PATH, "kvcreds-test-single");
-        Files.createDirectories(testSingleDir);
         Files.write(testDir.resolve("kv1"), "kv1-content".getBytes(StandardCharsets.UTF_8));
         Files.write(testDir.resolve("kv2"), "kv2-content".getBytes(StandardCharsets.UTF_8));
-        Files.write(testOtherDir.resolve("kv3"), "kv3-content".getBytes(StandardCharsets.UTF_8));
-        Files.write(testSingleDir.resolve("kv4"), "kv4-content".getBytes(StandardCharsets.UTF_8));
-        Files.write(testSingleDir.resolve("kv5"), "kv5-content".getBytes(StandardCharsets.UTF_8));
     }
 
     @AfterClass
@@ -66,7 +49,7 @@ public class PropertiesvolumesSpringBootTest {
 
     @Test
     public void shouldFindAllDeclaredVolumeProperties() {
-        final String[] declaredKeys = {"kv1", "kv2", "kv3", "kv5"};
+        final String[] declaredKeys = {"kv1", "kv2"};
         Arrays.stream(declaredKeys).forEach(k ->
             this.webClient.get().uri("/api/hello?name=" + k).exchange().expectStatus().isOk()
                 .expectBody().jsonPath(HelloController.HELLO_FIELD).isEqualTo(String.format("Hello, %s-content!", k))

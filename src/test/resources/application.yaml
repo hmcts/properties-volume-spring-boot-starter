@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: name-in-file
+  cloud:
+    propertiesvolume:
+      enabled: true
+      paths: /tmp/Nhdt625dhwUyt/kvcreds-test
