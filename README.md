@@ -17,7 +17,7 @@ For instance:
 ```yaml
 spring:
   application:
-    name: propertiesvolume-example
+    name: properties-volume-example
   cloud:
     propertiesvolume:
       enabled: true
