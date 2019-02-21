@@ -18,7 +18,6 @@ public class PropertiesvolumeConfigProperties {
 
     private List<String> paths = new LinkedList<>();
 
-
     public boolean isEnabled() {
         return this.enabled;
     }

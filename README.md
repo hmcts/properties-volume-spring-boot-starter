@@ -3,7 +3,9 @@
 [![Build Status](https://travis-ci.com/hmcts/properties-volume-spring-boot-starter.svg?branch=master)](https://travis-ci.com/hmcts/properties-volume-spring-boot-starter)
 [ ![Download](https://api.bintray.com/packages/hmcts/hmcts-maven/properties-volume-spring-boot-starter/images/download.svg) ](https://bintray.com/hmcts/hmcts-maven/properties-volume-spring-boot-starter/_latestVersion)
 
-This is a Spring Boot _starter_ library to read application configuration from Azure Keyvaults mounted as flexvolumes
+This is a Spring Boot _starter_ library to read application configuration properties from files using the file name as key 
+and the file content as value. This can be used in applications that have Azure Keyvaults mounted as flexvolumes, but there 
+are probably other valid uses.
 
 
 ## Usage
@@ -25,6 +27,15 @@ spring:
 ```
 If a path is a directory all the contained files are loaded.
 For each file found, the file name is the Azure Keyvault key and the file body is the related value. 
+For instance given the following path:
+```
+/kvmnt/draft-store/primary-encryption-key
+```
+a property named as follows would be created:
+
+```
+primary-encryption-key
+```
 
 ### Prerequisites
 
@@ -59,4 +70,4 @@ For the versions available, see the tags on this repository.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
