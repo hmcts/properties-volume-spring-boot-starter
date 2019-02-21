@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 
 @RunWith(SpringRunner.class)
@@ -30,7 +31,9 @@ import java.nio.file.Paths;
         "spring.cloud.propertiesvolume.paths="
             + PropertiesvolumesSpringBootTest.BASE_PATH + "/kvcreds-test"
             + ","
-            + PropertiesvolumesSpringBootTest.BASE_PATH + "/kvcreds-test-other",
+            + PropertiesvolumesSpringBootTest.BASE_PATH + "/kvcreds-test-other"
+            + ","
+            + PropertiesvolumesSpringBootTest.BASE_PATH + "/kvcreds-test-single/kv5",
         }
     )
 @AutoConfigureWebTestClient
@@ -48,9 +51,13 @@ public class PropertiesvolumesSpringBootTest {
         Files.createDirectories(testDir);
         Path testOtherDir = Paths.get(BASE_PATH, "kvcreds-test-other");
         Files.createDirectories(testOtherDir);
+        Path testSingleDir = Paths.get(BASE_PATH, "kvcreds-test-single");
+        Files.createDirectories(testSingleDir);
         Files.write(testDir.resolve("kv1"), "kv1-content".getBytes(StandardCharsets.UTF_8));
         Files.write(testDir.resolve("kv2"), "kv2-content".getBytes(StandardCharsets.UTF_8));
         Files.write(testOtherDir.resolve("kv3"), "kv3-content".getBytes(StandardCharsets.UTF_8));
+        Files.write(testSingleDir.resolve("kv4"), "kv4-content".getBytes(StandardCharsets.UTF_8));
+        Files.write(testSingleDir.resolve("kv5"), "kv5-content".getBytes(StandardCharsets.UTF_8));
     }
 
     @AfterClass
@@ -68,17 +75,16 @@ public class PropertiesvolumesSpringBootTest {
     }
 
     @Test
-    public void shouldFindAllExistingVolumeProperties() {
-        this.webClient.get().uri("/api/hello?name=kv1").exchange().expectStatus().isOk()
-            .expectBody().jsonPath(HelloController.HELLO_FIELD).isEqualTo("Hello, kv1-content!");
-        this.webClient.get().uri("/api/hello?name=kv2").exchange().expectStatus().isOk()
-            .expectBody().jsonPath(HelloController.HELLO_FIELD).isEqualTo("Hello, kv2-content!");
-        this.webClient.get().uri("/api/hello?name=kv3").exchange().expectStatus().isOk()
-            .expectBody().jsonPath(HelloController.HELLO_FIELD).isEqualTo("Hello, kv3-content!");
+    public void shouldFindAllDeclaredVolumeProperties() {
+        final String[] declaredKeys = {"kv1", "kv2", "kv3", "kv5"};
+        Arrays.stream(declaredKeys).forEach(k ->
+            this.webClient.get().uri("/api/hello?name=" + k).exchange().expectStatus().isOk()
+                .expectBody().jsonPath(HelloController.HELLO_FIELD).isEqualTo(String.format("Hello, %s-content!", k))
+        );
     }
 
     @Test
-    public void shouldNotFindNonExistingVolumeProperties() {
+    public void shouldNotFindNonDeclaredVolumeProperties() {
         this.webClient.get().uri("/api/hello?name=kv4").exchange().expectStatus().isOk()
             .expectBody().jsonPath("content").isEqualTo("Hello, not found!");
     }
