@@ -44,7 +44,16 @@ a property named as follows would be created:
 draft-store.primary-encryption-key
 ```
 
-If _enabled_ is explicitly set to false (it is true if omitted) then this is instead:
+If _prefixed_ is explicitly set to false (it defaults to true if omitted) then this is instead:
+```yaml
+spring:
+  application:
+    name: properties-volume-example
+  cloud:
+    propertiesvolume:
+      prefixed: false
+      paths: /mnt/secrets/this,/mnt/secrets/that,/mnt/secrets/other
+```
 ```
 primary-encryption-key
 ```
