@@ -1,0 +1,5 @@
+spring:
+  cloud:
+    propertiesvolume:
+      paths: /tmp/Nhdt625dhwUyt/kvcreds-test
+
