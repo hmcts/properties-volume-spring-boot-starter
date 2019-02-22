@@ -49,10 +49,11 @@ public class PropertiesvolumesFromFileSpringBootTest {
 
     @Test
     public void shouldFindAllDeclaredVolumeProperties() {
-        final String[] declaredKeys = {"kv1", "kv2"};
+        final String[] declaredKeys = {"kvcreds-test.kv1", "kvcreds-test.kv2"};
         Arrays.stream(declaredKeys).forEach(k ->
             this.webClient.get().uri("/api/hello?name=" + k).exchange().expectStatus().isOk()
-                .expectBody().jsonPath(HelloController.HELLO_FIELD).isEqualTo(String.format("Hello, %s-content!", k))
+                .expectBody().jsonPath(HelloController.HELLO_FIELD)
+                .isEqualTo(String.format("Hello, %s-content!", k.substring(k.lastIndexOf('.') + 1)))
         );
     }
 
