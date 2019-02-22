@@ -19,6 +19,7 @@ public class PropertiesvolumePropertySource extends MapPropertySource {
 
     private static final String PREFIX = "propertiesvolume";
     private static final String PROPERTY_SOURCE_NAME_SEPARATOR = ".";
+    private static final int MIN_NAMES_FOR_PREFIX = 2;
 
     public PropertiesvolumePropertySource(PropertiesvolumeConfigProperties config) {
         this(getName(config), getData(config));
@@ -38,31 +39,45 @@ public class PropertiesvolumePropertySource extends MapPropertySource {
 
     private static Map<String, Object> getData(PropertiesvolumeConfigProperties config) {
         Map<String, Object> result = new ConcurrentHashMap<>();
-        putPath(result, config.getPaths());
+        putPath(result, config.getPaths(), config.isPrefixed());
         return result;
     }
 
-    protected static void putPath(Map<String, ? super String> result, List<String> paths) {
+    protected static void putPath(Map<String, ? super String> result, List<String> paths, boolean prefixed) {
         paths.stream()
             .map(Paths::get)
             .filter(Files::exists)
-            .forEach(p -> putAll(p, result));
+            .forEach(p -> putAll(p, result, prefixed));
     }
 
-    private static void putAll(Path path, Map<String, ? super String> result) {
+    private static void putAll(Path path, Map<String, ? super String> result, boolean prefixed) {
         try {
             Files.walk(path)
                 .filter(Files::isRegularFile)
-                .forEach(p -> readFile(p, result));
+                .forEach(p -> readFile(p, result, prefixed));
         } catch (IOException e) {
             throw new PropertiesvolumeException("Error walking propertiesvolume files", e);
         }
     }
 
-    private static void readFile(Path path, Map<String, ? super String> result) {
+    private static void readFile(Path path, Map<String, ? super String> result, boolean prefixed) {
+        String fileName;
+        if (prefixed) {
+            if (path.getNameCount() < MIN_NAMES_FOR_PREFIX) {
+                throw new PropertiesvolumeException("UseDirPrefix requires at least 1 parent directory");
+            }
+            int count = path.getNameCount();
+            fileName = String.format("%s%s%s",
+                path.subpath(count - 2, count - 1).toString(),
+                PROPERTY_SOURCE_NAME_SEPARATOR,
+                path.getFileName().toString()
+            );
+        } else {
+            fileName = path.getFileName().toString();
+        }
         try {
             result.put(
-                path.getFileName().toString(),
+                fileName,
                 new String(Files.readAllBytes(path)).trim()
             );
         } catch (IOException e) {

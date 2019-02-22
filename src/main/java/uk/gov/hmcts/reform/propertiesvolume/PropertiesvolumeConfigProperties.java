@@ -12,9 +12,12 @@ import java.util.List;
 @ConfigurationProperties("spring.cloud.propertiesvolume")
 public class PropertiesvolumeConfigProperties {
 
-    protected boolean enabled = true;
+    private boolean enabled = true;
 
-    protected String name;
+    // Use parent dir as namespace generating a key like 'parentdir.file'
+    private boolean prefixed = true;
+
+    private String name;
 
     private List<String> paths = new LinkedList<>();
 
@@ -24,6 +27,14 @@ public class PropertiesvolumeConfigProperties {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isPrefixed() {
+        return prefixed;
+    }
+
+    public void setPrefixed(boolean prefixed) {
+        this.prefixed = prefixed;
     }
 
     public String getName() {

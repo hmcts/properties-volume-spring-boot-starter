@@ -27,6 +27,7 @@ import java.util.Arrays;
     properties = {
         "spring.application.name=propertiesvolume-example",
         "spring.cloud.propertiesvolume.enabled=true",
+        "spring.cloud.propertiesvolume.prefixed=false",
         "spring.cloud.propertiesvolume.paths="
             + PropertiesvolumesSpringBootTest.BASE_PATH + "/kvcreds-test"
             + ","

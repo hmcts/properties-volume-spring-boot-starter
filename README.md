@@ -14,7 +14,7 @@ Include the module into the dependency list.
  compile 'uk.gov.hmcts.reform:properties-volume-spring-boot-starter:x.x.x'
 ```
 
-To define which directories or files contain Azure Keyvault entries update application.yaml to define the related paths.
+To define which directories or files contain Azure Keyvault entries update *bootstrap.yaml* to define the related paths.
 For instance:
 ```yaml
 spring:
@@ -23,19 +23,32 @@ spring:
   cloud:
     propertiesvolume:
       enabled: true
-      paths: /kvmnt/this,/kvmnt/that,/kvmount/other
+      prefixed: true
+      paths: /mnt/secrets/this,/mnt/secrets/that,/mnt/secrets/other
 ```
+By default both _enabled_ and _prefixed_ are true. This means that properties are
+loaded from the given paths (i.e. enabled) and the file parent directory is used 
+as prefix in the property name. 
 If a path is a directory all the contained files are loaded.
-For each file found, the file name is the Azure Keyvault key and the file body is the related value. 
+For each file found:
+- the parent directory is the Azure Keyvault name
+- the file name is the Azure Keyvault key 
+- the file body is the related value 
 For instance given the following path:
 ```
-/kvmnt/draft-store/primary-encryption-key
+/mnt/secrets/draft-store/primary-encryption-key
 ```
 a property named as follows would be created:
 
 ```
+draft-store.primary-encryption-key
+```
+
+If _enabled_ is explicitly set to false (it is true if omitted) then this is instead:
+```
 primary-encryption-key
 ```
+
 
 ### Prerequisites
 

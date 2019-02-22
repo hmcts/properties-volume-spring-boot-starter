@@ -8,4 +8,8 @@ public class PropertiesvolumeException extends RuntimeException {
         super(message, cause);
     }
 
+    public PropertiesvolumeException(String message) {
+        super(message);
+    }
+
 }
