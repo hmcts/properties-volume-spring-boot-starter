@@ -1,13 +1,11 @@
 package uk.gov.hmcts.reform.propertiesvolume;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import uk.gov.hmcts.reform.propertiesvolume.example.App;
 import uk.gov.hmcts.reform.propertiesvolume.example.HelloController;
@@ -20,7 +18,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = App.class
@@ -33,7 +30,7 @@ public class PropertiesvolumesFromFileSpringBootTest {
     @Autowired
     private transient WebTestClient webClient;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws IOException {
         Volumes.cleanUp(BASE_PATH);
         Path testDir = Paths.get(BASE_PATH, "kvcreds-test");
@@ -42,7 +39,7 @@ public class PropertiesvolumesFromFileSpringBootTest {
         Files.write(testDir.resolve("kv2"), "kv2-content".getBytes(StandardCharsets.UTF_8));
     }
 
-    @AfterClass
+    @AfterAll
     public static void cleanUpAfter() throws IOException {
         Volumes.cleanUp(BASE_PATH);
     }

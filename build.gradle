@@ -19,28 +19,11 @@ version '0.0.3'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-sourceSets {
-  integrationTest {
-    java {
-      compileClasspath += main.output
-      runtimeClasspath += main.output
-      srcDir file('src/integrationTest/java')
-    }
-    resources.srcDir file('src/integrationTest/resources')
-  }
-}
-
 tasks.withType(JavaCompile) {
   options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation" << "-Werror"
 }
 
 test {
-  useJUnitPlatform()
-}
-
-task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
-  testClassesDirs = sourceSets.integrationTest.output.classesDirs
-  classpath = sourceSets.integrationTest.runtimeClasspath
   useJUnitPlatform()
 }
 
@@ -59,7 +42,7 @@ checkstyle {
 
 pmd {
   toolVersion = "6.11.0"
-  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest]
+  sourceSets = [sourceSets.main, sourceSets.test]
   reportsDir = file("$project.buildDir/reports/pmd")
   ruleSetFiles = files("config/pmd/ruleset.xml")
 }
@@ -73,7 +56,7 @@ dependencyCheck {
 }
 
 jacocoTestReport {
-  executionData(test, integration)
+  executionData(test)
   reports {
     xml.enabled = true
     csv.enabled = false
@@ -81,12 +64,11 @@ jacocoTestReport {
   }
 }
 
-project.tasks['sonarqube'].dependsOn test, integration
+project.tasks['sonarqube'].dependsOn test
 sonarqube {
   properties {
     property "sonar.projectName", "Reform :: Propertiesvolume starter"
     property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
-    property "sonar.jacoco.itReportPath", "${project.buildDir}/jacoco/integration.exec"
   }
 }
 
@@ -171,7 +153,6 @@ def versions = [
 dependencies {
   compile(
     "org.springframework.boot:spring-boot-starter-web",
-    "org.springframework.boot:spring-boot-starter-validation",
     "org.springframework.cloud:spring-cloud-context:2.1.0.RELEASE",
   )
 
@@ -183,9 +164,6 @@ dependencies {
   testRuntimeOnly group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-
-  integrationTestCompile sourceSets.main.runtimeClasspath
-  integrationTestCompile sourceSets.test.runtimeClasspath
 
 }
 
