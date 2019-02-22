@@ -58,6 +58,13 @@ public class PropertiesvolumesFromFileSpringBootTest {
     }
 
     @Test
+    public void shouldFindReferencedVolumeProperties() {
+        this.webClient.get().uri("/api/hello?name=testapp.credtest").exchange().expectStatus().isOk()
+            .expectBody().jsonPath(HelloController.HELLO_FIELD)
+            .isEqualTo(String.format("Hello, %s-content!", "kv1"));
+    }
+
+    @Test
     public void shouldNotFindNonDeclaredVolumeProperties() {
         this.webClient.get().uri("/api/hello?name=kv4").exchange().expectStatus().isOk()
             .expectBody().jsonPath("content").isEqualTo("Hello, not found!");

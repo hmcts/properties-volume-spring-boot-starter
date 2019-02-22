@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: test-propertiesvolume-yaml
+
+testapp:
+  credtest: ${kvcreds-test.kv1}
