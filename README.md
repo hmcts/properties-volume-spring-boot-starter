@@ -18,8 +18,6 @@ To define which directories or files contain Azure Keyvault entries update *boot
 For instance:
 ```yaml
 spring:
-  application:
-    name: properties-volume-example
   cloud:
     propertiesvolume:
       enabled: true
@@ -47,8 +45,6 @@ draft-store.primary-encryption-key
 If _prefixed_ is explicitly set to false (it defaults to true if omitted) then this is instead:
 ```yaml
 spring:
-  application:
-    name: properties-volume-example
   cloud:
     propertiesvolume:
       prefixed: false
@@ -58,6 +54,18 @@ spring:
 primary-encryption-key
 ```
 
+The properties obtained this way can then be referenced as usual, also in configuration files such as 
+_application.yaml_:
+
+```yaml
+spring:
+  application:
+    name: properties-volume-example
+
+draft:
+  pk: ${draft-store.primary-encryption-key}
+
+```
 
 ### Prerequisites
 
