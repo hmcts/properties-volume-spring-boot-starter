@@ -59,6 +59,19 @@ public class PropertiesvolumesFromFileSpringBootTest {
         this.webClient.get().uri("/api/hello?name=testapp.credtest").exchange().expectStatus().isOk()
             .expectBody().jsonPath(HelloController.HELLO_FIELD)
             .isEqualTo(String.format("Hello, %s-content!", "kv1"));
+        this.webClient.get().uri("/api/hello?name=testapp.credtestsame").exchange().expectStatus().isOk()
+            .expectBody().jsonPath(HelloController.HELLO_FIELD)
+            .isEqualTo(String.format("Hello, %s-content!", "kv1"));
+    }
+
+    @Test
+    public void shouldFindAllAliasedVolumeProperties() {
+        this.webClient.get().uri("/api/hello?name=" + "KV1_ALIAS").exchange().expectStatus().isOk()
+            .expectBody().jsonPath(HelloController.HELLO_FIELD)
+            .isEqualTo(String.format("Hello, kv1-content!"));
+        this.webClient.get().uri("/api/hello?name=" + "KV2_ALIAS").exchange().expectStatus().isOk()
+            .expectBody().jsonPath(HelloController.HELLO_FIELD)
+            .isEqualTo(String.format("Hello, kv2-content!"));
     }
 
     @Test

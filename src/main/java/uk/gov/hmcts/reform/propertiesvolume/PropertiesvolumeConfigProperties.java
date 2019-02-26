@@ -4,6 +4,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Configuration values for properties (e.g. secrets) loaded from a keyvault flexvolume.
@@ -20,6 +22,8 @@ public class PropertiesvolumeConfigProperties {
     private String name;
 
     private List<String> paths = new LinkedList<>();
+
+    private Map<String, String> aliases = new ConcurrentHashMap<>();
 
     public boolean isEnabled() {
         return this.enabled;
@@ -51,6 +55,14 @@ public class PropertiesvolumeConfigProperties {
 
     public void setPaths(List<String> paths) {
         this.paths = paths;
+    }
+
+    public Map<String, String> getAliases() {
+        return aliases;
+    }
+
+    public void setAliases(Map<String, String> aliases) {
+        this.aliases = aliases;
     }
 
 }

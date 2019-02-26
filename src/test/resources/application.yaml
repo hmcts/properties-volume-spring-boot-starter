@@ -4,3 +4,4 @@ spring:
 
 testapp:
   credtest: ${kvcreds-test.kv1}
+  credtestsame: ${KV1_ALIAS}
