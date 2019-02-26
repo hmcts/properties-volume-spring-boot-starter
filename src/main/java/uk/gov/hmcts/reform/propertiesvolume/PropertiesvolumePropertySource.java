@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -40,6 +41,7 @@ public class PropertiesvolumePropertySource extends MapPropertySource {
     private static Map<String, Object> getData(PropertiesvolumeConfigProperties config) {
         Map<String, Object> result = new ConcurrentHashMap<>();
         putPath(result, config.getPaths(), config.isPrefixed());
+        putAliases(result, config.getAliases());
         return result;
     }
 
@@ -57,6 +59,12 @@ public class PropertiesvolumePropertySource extends MapPropertySource {
                 .forEach(p -> readFile(p, result, prefixed));
         } catch (IOException e) {
             throw new PropertiesvolumeException("Error walking propertiesvolume files", e);
+        }
+    }
+
+    private static void putAliases(Map<String, ? super String> result, Map<String, String> aliases) {
+        if (aliases != null && !aliases.isEmpty()) {
+            aliases.forEach((k, v) -> result.computeIfAbsent(v, x -> Objects.toString(result.get(k), null)));
         }
     }
 

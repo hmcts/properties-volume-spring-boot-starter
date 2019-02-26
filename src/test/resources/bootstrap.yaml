@@ -2,4 +2,7 @@ spring:
   cloud:
     propertiesvolume:
       paths: /tmp/Nhdt625dhwUyt/kvcreds-test
-
+      aliases:
+        kvcreds-test.kv1: KV1_ALIAS
+        kvcreds-test.kv2: KV2_ALIAS
+        

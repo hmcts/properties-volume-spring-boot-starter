@@ -62,6 +62,16 @@ public class PropertiesvolumesFromFileSpringBootTest {
     }
 
     @Test
+    public void shouldFindAllAliasedVolumeProperties() {
+        this.webClient.get().uri("/api/hello?name=" + "KV1_ALIAS").exchange().expectStatus().isOk()
+            .expectBody().jsonPath(HelloController.HELLO_FIELD)
+            .isEqualTo(String.format("Hello, kv1-content!"));
+        this.webClient.get().uri("/api/hello?name=" + "KV2_ALIAS").exchange().expectStatus().isOk()
+            .expectBody().jsonPath(HelloController.HELLO_FIELD)
+            .isEqualTo(String.format("Hello, kv2-content!"));
+    }
+
+    @Test
     public void shouldNotFindNonDeclaredVolumeProperties() {
         this.webClient.get().uri("/api/hello?name=kv4").exchange().expectStatus().isOk()
             .expectBody().jsonPath("content").isEqualTo("Hello, not found!");

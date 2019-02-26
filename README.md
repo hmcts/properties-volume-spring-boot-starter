@@ -23,10 +23,23 @@ spring:
       enabled: true
       prefixed: true
       paths: /mnt/secrets/this,/mnt/secrets/that,/mnt/secrets/other
+      aliases:
+        this.secret1: SECRET1
+        that.secret1: SECRET2
 ```
 By default both _enabled_ and _prefixed_ are true. This means that properties are
 loaded from the given paths (i.e. enabled) and the file parent directory is used 
 as prefix in the property name. 
+This means that the above configuration is exactly as this:
+```yaml
+spring:
+  cloud:
+    propertiesvolume:
+      paths: /mnt/secrets/this,/mnt/secrets/that,/mnt/secrets/other
+      aliases:
+        this.secret1: SECRET1
+        that.secret1: SECRET2
+```
 If a path is a directory all the contained files are loaded.
 For each file found:
 - the parent directory is the Azure Keyvault name
@@ -41,6 +54,28 @@ a property named as follows would be created:
 ```
 draft-store.primary-encryption-key
 ```
+
+Properties can also be aliased, so in the following declaration:
+```yaml
+spring:
+  cloud:
+    propertiesvolume:
+      paths: /mnt/secrets/draft-store/primary-encryption-key,/mnt/secrets/that
+      aliases:
+        draft-store.primary-encryption-key: SECRET1
+        that.secret1: SECRET2
+```
+the following 2 properties would have the same value:
+```
+draft-store.primary-encryption-key
+SECRET1
+```
+and also the following 2 properties would have the same value: 
+```
+that.secret1
+SECRET2
+```
+Please note that a single alias can be currently created for each property.
 
 If _prefixed_ is explicitly set to false (it defaults to true if omitted) then this is instead:
 ```yaml
