@@ -3,7 +3,7 @@ plugins {
   id 'jacoco'
   id 'pmd'
   id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-  id 'org.springframework.boot' version '2.3.1.RELEASE'
+  id 'org.springframework.boot' version '2.3.2.RELEASE'
   id 'com.jfrog.bintray' version '1.8.5'
   id 'org.owasp.dependencycheck' version '4.0.2'
   id 'com.github.ben-manes.versions' version '0.28.0'
