@@ -1,4 +1,6 @@
-# HMCTS properties volume library
+# HMCTS properties volume library [DEPRECATED]
+
+**WARNING** :warning: This library has been deprecated. Please use [Configtree processing](https://spring.io/blog/2020/08/14/config-file-processing-in-spring-boot-2-4) in spring boot 2.4 to achieve this. 
 
 [![Build Status](https://travis-ci.com/hmcts/properties-volume-spring-boot-starter.svg?branch=master)](https://travis-ci.com/hmcts/properties-volume-spring-boot-starter)
 [ ![Download](https://api.bintray.com/packages/hmcts/hmcts-maven/properties-volume-spring-boot-starter/images/download.svg) ](https://bintray.com/hmcts/hmcts-maven/properties-volume-spring-boot-starter/_latestVersion)
